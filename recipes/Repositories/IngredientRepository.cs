@@ -10,18 +10,14 @@ namespace recipes.Repositories
 {
     public class IngredientRepository
     {
-
-        private SqlConnection con;
-        private void connection()
+        public IngredientRepository(IDbConnection db)
         {
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(connectionString);
-
+            con = (SqlConnection)db;
         }
+        private SqlConnection con;
         //To Add Ingredient
         public bool AddIngredient(Ingredient obj)
         {
-            connection();
             SqlCommand com = new SqlCommand("AddNewIngredient", con);
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@RecipeId", obj.recipeId);
@@ -45,7 +41,6 @@ namespace recipes.Repositories
         //To view ingredients     
         public List<Ingredient> GetAllIngredients()
         {
-            connection();
             List<Ingredient> IngredientList = new List<Ingredient>();
 
 
@@ -72,10 +67,41 @@ namespace recipes.Repositories
 
             return IngredientList;
         }
+
+        //To view a recipe's ingredients     
+        public List<Ingredient> GetIngredientsByRecipeId(Guid recipeId)
+        {
+            List<Ingredient> IngredientList = new List<Ingredient>();
+
+
+            SqlCommand com = new SqlCommand("GetIngredientsByRecipeId", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@RecipeId", recipeId);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataTable dt = new DataTable();
+
+            con.Open();
+            da.Fill(dt);
+            con.Close();
+            foreach (DataRow dr in dt.Rows)
+            {
+                IngredientList.Add(
+                    new Ingredient
+                    {
+                        id = new Guid(dr["id"].ToString()),
+                        recipeId = new Guid(dr["recipeId"].ToString()),
+                        Name = Convert.ToString(dr["name"]),
+                        Quantity = Convert.ToString(dr["quantity"])
+                    }
+                    );
+            }
+
+            return IngredientList;
+        }
+
         //To Update Ingredient 
         public bool UpdateIngredient(Ingredient obj)
         {
-            connection();
             SqlCommand com = new SqlCommand("UpdateIngredient", con);
 
             com.CommandType = CommandType.StoredProcedure;
@@ -97,8 +123,6 @@ namespace recipes.Repositories
         //To delete Ingredient    
         public bool DeleteIngredient(Guid Id)
         {
-
-            connection();
             SqlCommand com = new SqlCommand("DeleteIngredientById", con);
 
             com.CommandType = CommandType.StoredProcedure;

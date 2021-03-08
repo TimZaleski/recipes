@@ -12,14 +12,32 @@ namespace recipes.Controllers
 {
     public class RecipeController : Controller
     {
+        private readonly RecipeRepository _repo;
+        private readonly IngredientRepository _ingRepo;
 
+        public RecipeController(RecipeRepository repo, IngredientRepository ingRepo)
+        {
+            _repo = repo;
+            _ingRepo = ingRepo;
+        }
         // GET: Recipe/GetAllRecipes    
         public ActionResult GetAllRecipes()
         {
-
-            RecipeRepository RecipeRepo = new RecipeRepository();
             ModelState.Clear();
-            return View(RecipeRepo.GetAllRecipes());
+            return View(_repo.GetAllRecipes());
+        }
+
+        // GET: Recipe/{id}/GetIngredients    
+        public ActionResult GetIngredients(Guid id)
+        {
+            ModelState.Clear();
+            return View(_ingRepo.GetIngredientsByRecipeId(id));
+        }
+
+        // GET: Recipe/AddRecipe    
+        public ActionResult AddRecipe()
+        {
+            return View();
         }
 
         // POST: Recipe/AddRecipe    
@@ -30,9 +48,7 @@ namespace recipes.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    RecipeRepository RecipeRepo = new RecipeRepository();
-
-                    if (RecipeRepo.AddRecipe(rec))
+                    if (_repo.AddRecipe(rec))
                     {
                         ViewBag.Message = "Recipe added successfully";
                     }
@@ -47,11 +63,9 @@ namespace recipes.Controllers
         }
 
         // GET: Recipe/UpdateRecipe/{id}   
-        public ActionResult EditRecipe(Guid id)
+        public ActionResult UpdateRecipe(Guid id)
         {
-            RecipeRepository RecipeRepo = new RecipeRepository();
-
-            return View(RecipeRepo.GetAllRecipes().Find(Rec => Rec.id == id));
+            return View(_repo.GetAllRecipes().Find(Rec => Rec.id == id));
 
         }
 
@@ -62,9 +76,7 @@ namespace recipes.Controllers
         {
             try
             {
-                RecipeRepository RecipeRepo = new RecipeRepository();
-
-                RecipeRepo.UpdateRecipe(obj);
+                _repo.UpdateRecipe(obj);
                 return RedirectToAction("GetAllRecipes");
             }
             catch
@@ -78,8 +90,7 @@ namespace recipes.Controllers
         {
             try
             {
-                RecipeRepository RecipeRepo = new RecipeRepository();
-                if (RecipeRepo.DeleteRecipe(id))
+                if (_repo.DeleteRecipe(id))
                 {
                     ViewBag.AlertMsg = "Recipe deleted successfully";
 

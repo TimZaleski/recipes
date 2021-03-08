@@ -5,23 +5,22 @@ using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
 using recipes.Models;
+using System.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace recipes.Repositories
 {
     public class RecipeRepository
     {
-
-        private SqlConnection con;
-        private void connection()
+        public RecipeRepository(IDbConnection db)
         {
-            string connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-            con = new SqlConnection(connectionString);
-
+            con = (SqlConnection)db;
         }
+        private SqlConnection con;
+
         //To Add Recipe
         public bool AddRecipe(Recipe obj)
         {
-            connection();
             SqlCommand com = new SqlCommand("AddNewRecipe", con);
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@Name", obj.Name);
@@ -44,7 +43,6 @@ namespace recipes.Repositories
         //To view recipe     
         public List<Recipe> GetAllRecipes()
         {
-            connection();
             List<Recipe> RecipeList = new List<Recipe>();
 
 
@@ -73,7 +71,6 @@ namespace recipes.Repositories
         //To Update Recipe 
         public bool UpdateRecipe(Recipe obj)
         {
-            connection();
             SqlCommand com = new SqlCommand("UpdateRecipe", con);
 
             com.CommandType = CommandType.StoredProcedure;
@@ -95,8 +92,6 @@ namespace recipes.Repositories
         //To delete Recipe    
         public bool DeleteRecipe(Guid Id)
         {
-
-            connection();
             SqlCommand com = new SqlCommand("DeleteRecipeById", con);
 
             com.CommandType = CommandType.StoredProcedure;
