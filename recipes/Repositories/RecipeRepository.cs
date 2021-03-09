@@ -21,10 +21,10 @@ namespace recipes.Repositories
         //To Add Recipe
         public bool AddRecipe(Recipe obj)
         {
-            SqlCommand com = new SqlCommand("AddNewRecipe", con);
+            SqlCommand com = new SqlCommand("AddRecipe", con);
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@Name", obj.Name);
-            com.Parameters.AddWithValue("@City", obj.Description);
+            com.Parameters.AddWithValue("@Description", obj.Description);
 
             con.Open();
             int i = com.ExecuteNonQuery();

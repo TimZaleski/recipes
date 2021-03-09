@@ -33,7 +33,7 @@ namespace recipes.Controllers
 
         // POST: Ingredient/AddIngredient    
         [HttpPost]
-        public ActionResult AddIngredient(Ingredient ing)
+        public ActionResult AddIngredient([FromBody] Ingredient ing)
         {
             try
             {

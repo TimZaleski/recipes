@@ -18,7 +18,7 @@ namespace recipes.Repositories
         //To Add Ingredient
         public bool AddIngredient(Ingredient obj)
         {
-            SqlCommand com = new SqlCommand("AddNewIngredient", con);
+            SqlCommand com = new SqlCommand("AddIngredient", con);
             com.CommandType = CommandType.StoredProcedure;
             com.Parameters.AddWithValue("@RecipeId", obj.recipeId);
             com.Parameters.AddWithValue("@Name", obj.Name);

@@ -5,6 +5,7 @@ namespace recipes.Models
 {
     public class Recipe
     {
+        [Display(Name = "Id")]
         public Guid id { get; set; }
 
         [Required(ErrorMessage = "Recipe name is required.")]

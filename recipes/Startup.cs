@@ -29,7 +29,7 @@ namespace recipes
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddControllersWithViews();
             services.AddScoped<IDbConnection>(x => CreateDbConnection());
             services.AddSwaggerGen(c =>
             {
