@@ -68,6 +68,36 @@ namespace recipes.Repositories
             return IngredientList;
         }
 
+        //To view ingredient    
+        public Ingredient GetIngredient(Guid id)
+        {
+            Ingredient Ingredient = new Ingredient();
+
+
+            SqlCommand com = new SqlCommand("GetIngredientById", con);
+            com.CommandType = CommandType.StoredProcedure;
+            com.Parameters.AddWithValue("@Id", id);
+            SqlDataAdapter da = new SqlDataAdapter(com);
+            DataTable dt = new DataTable();
+
+            con.Open();
+            da.Fill(dt);
+            con.Close();
+            foreach (DataRow dr in dt.Rows)
+            {
+                Ingredient =
+                    new Ingredient
+                    {
+                        id = new Guid(dr["id"].ToString()),
+                        recipeId = new Guid(dr["recipeId"].ToString()),
+                        Name = Convert.ToString(dr["name"]),
+                        Quantity = Convert.ToString(dr["quantity"])
+                    };
+            }
+
+            return Ingredient;
+        }
+
         //To view a recipe's ingredients     
         public List<Ingredient> GetIngredientsByRecipeId(Guid recipeId)
         {

@@ -51,6 +51,7 @@ namespace recipes.Controllers
                     if (_repo.AddRecipe(rec))
                     {
                         ViewBag.Message = "Recipe added successfully";
+                        return RedirectToAction("GetAllRecipes");
                     }
                 }
 
@@ -69,9 +70,8 @@ namespace recipes.Controllers
 
         }
 
-        // POST: Recipe/UpdateRecipe/{id}    
+        // POST: Recipe/UpdateRecipe/{id}
         [HttpPost]
-
         public ActionResult UpdateRecipe(Guid id, Recipe obj)
         {
             try

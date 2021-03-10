@@ -26,12 +26,12 @@ namespace recipes.Controllers
         }
 
         // GET: Ingredient/AddIngredient   
-        public ActionResult AddIngredient()
+        public ActionResult AddIngredient(Recipe rec)
         {
             return View();
         }
 
-        // POST: Ingredient/AddIngredient    
+        // POST: Ingredient/AddIngredient  
         [HttpPost]
         public ActionResult AddIngredient([FromBody] Ingredient ing)
         {
@@ -66,7 +66,7 @@ namespace recipes.Controllers
             try
             {
                 _repo.UpdateIngredient(obj);
-                return RedirectToAction("GetAllIngredients");
+                return RedirectToAction("GetIngredients", "Recipe", new { id = obj.recipeId });
             }
             catch
             {
@@ -79,12 +79,13 @@ namespace recipes.Controllers
         {
             try
             {
+                Ingredient ing = _repo.GetIngredient(id);
                 if (_repo.DeleteIngredient(id))
                 {
                     ViewBag.AlertMsg = "Ingredient deleted successfully";
 
                 }
-                return RedirectToAction("GetAllIngredients");
+                return RedirectToAction("GetIngredients", "Recipe", new { id = ing.recipeId });
             }
             catch
             {

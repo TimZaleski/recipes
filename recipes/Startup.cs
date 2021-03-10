@@ -72,7 +72,7 @@ namespace recipes
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    pattern: "{controller=Recipe}/{action=GetAllRecipes}");
             });
         }
     }
