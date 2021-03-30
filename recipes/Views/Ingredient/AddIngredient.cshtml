@@ -4,7 +4,7 @@
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="AddIngredient">
+        <form asp-action="AddIngredient" asp-route-id="@(Context.Request.Query["id"])">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="Name" class="control-label"></label>
@@ -24,7 +24,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-controller="Recipe" asp-action="GetIngredients" asp-route-id="@(Context.Request.Query["id"])">Back to List</a>
 </div>
 
 @section Scripts {

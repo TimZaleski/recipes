@@ -1,7 +1,7 @@
 ﻿@model IEnumerable<recipes.Models.Ingredient>
 
 <p>
-    <a asp-controller="Ingredient" asp-action="AddIngredient">Create New</a>
+    <a asp-controller="Ingredient" asp-action="AddIngredient" asp-route-id="@(Context.Request.Query["id"])">Create New</a>
 </p>
 <table class="table">
     <thead>

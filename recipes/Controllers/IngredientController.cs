@@ -26,22 +26,24 @@ namespace recipes.Controllers
         }
 
         // GET: Ingredient/AddIngredient   
-        public ActionResult AddIngredient(Recipe rec)
+        public ActionResult AddIngredient()
         {
             return View();
         }
 
-        // POST: Ingredient/AddIngredient  
+        // POST: Ingredient/AddIngredient/{id}
         [HttpPost]
-        public ActionResult AddIngredient([FromBody] Ingredient ing)
+        public ActionResult AddIngredient(Guid id, Ingredient ing)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
+                    ing.recipeId = id;
                     if (_repo.AddIngredient(ing))
                     {
                         ViewBag.Message = "Ingredient added successfully";
+                        return RedirectToAction("GetIngredients", "Recipe", new { id = ing.recipeId });
                     }
                 }
                 return View();
